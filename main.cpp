@@ -1,5 +1,5 @@
 
-/*
+
 #include <iostream>
 #include <algorithm>
 
@@ -16,22 +16,14 @@ int column;
 char symbol = 'X';
 bool draw = false;
 
-string first_person;
-string second_person;
+string player_name;
 
 void gameFunction0() {
     cout << "\nWelcome to Tic Tac Toe! -------" << endl;
 
-    cout << "\nPlease Enter the name for First Player: " << endl;
-    cin >> first_person;
-    cout << "Your name is: " << first_person << "! " << endl;
-
-    cout << "\nPlease Enter the name for Second Player: " << endl;
-    cin >> second_person;
-    cout << "Your name is: " << second_person << "! " << endl;
-
-    cout << "\nPlayer Rules: " << first_person << " will go first." << endl;
-    cout << second_person << " will go second." << endl;
+    cout << "\nPlease Enter your name: " << endl;
+    cin >> player_name;
+    cout << "Your name is: " << player_name << "! " << endl;
 
     cout << "\nLet's Begin!\n" << endl;
 
@@ -144,10 +136,7 @@ pair<int, pair<int, int>> findBestMove() {
 void gamefunction1() {
     int digit;
     if (symbol == 'X') {
-        cout << first_person << ", Please Choose your Number: ";
-        cin >> digit;
-    } else {
-        cout << second_person << ", Please Choose your Number: ";
+        cout << player_name << ", Please Choose your Number: ";
         cin >> digit;
     }
 
@@ -219,12 +208,14 @@ int main() {
 
     if (draw) {
         cout << "The game ended in a draw!" << endl;
-    } else if (symbol == 'X') {
-        cout << second_person << " Wins!" << endl;
+    } else if (symbol == 'O') { // Checking if the AI won
+        cout << "AI Wins!" << endl;
     } else {
-        cout << first_person << " Wins!" << endl;
+        cout << player_name << " Wins!" << endl; // If AI didn't win, player wins
     }
 
     return 0;
-}*/
+
+}
+
 
