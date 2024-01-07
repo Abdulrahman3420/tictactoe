@@ -1,11 +1,7 @@
-TRIAL 2
-
-
 
 /*
-
-
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -47,6 +43,102 @@ void gameFunction0() {
         cout << endl;
         if (i < 2) cout << "-----------\n";
     }
+}
+
+bool isMovesLeft() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (game_spaces[i][j] != 'X' && game_spaces[i][j] != 'O') {
+                return true; // There are still available moves
+            }
+        }
+    }
+    return false; // No available moves
+}
+
+int evaluateBoard() {
+    for (int i = 0; i < 3; i++) {
+        if (game_spaces[i][0] == game_spaces[i][1] && game_spaces[i][0] == game_spaces[i][2]) {
+            if (game_spaces[i][0] == 'X') return -1; // Player wins
+            else if (game_spaces[i][0] == 'O') return 1; // AI wins
+        }
+        if (game_spaces[0][i] == game_spaces[1][i] && game_spaces[0][i] == game_spaces[2][i]) {
+            if (game_spaces[0][i] == 'X') return -1; // Player wins
+            else if (game_spaces[0][i] == 'O') return 1; // AI wins
+        }
+    }
+
+    if (game_spaces[0][0] == game_spaces[1][1] && game_spaces[0][0] == game_spaces[2][2]) {
+        if (game_spaces[0][0] == 'X') return -1; // Player wins
+        else if (game_spaces[0][0] == 'O') return 1; // AI wins
+    }
+    if (game_spaces[0][2] == game_spaces[1][1] && game_spaces[0][2] == game_spaces[2][0]) {
+        if (game_spaces[0][2] == 'X') return -1; // Player wins
+        else if (game_spaces[0][2] == 'O') return 1; // AI wins
+    }
+
+    return 0; // No winner
+}
+
+int minimax(bool isMaximizer) {
+    int score = evaluateBoard();
+
+    if (score != 0) {
+        return score;
+    }
+
+    if (!isMovesLeft()) {
+        return 0;
+    }
+
+    int bestScore = isMaximizer ? -1000 : 1000;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (game_spaces[i][j] != 'X' && game_spaces[i][j] != 'O') {
+                char originalValue = game_spaces[i][j];
+                game_spaces[i][j] = isMaximizer ? 'O' : 'X';
+
+                int currentScore = minimax(!isMaximizer);
+                if (isMaximizer) {
+                    bestScore = max(bestScore, currentScore);
+                } else {
+                    bestScore = min(bestScore, currentScore);
+                }
+
+                game_spaces[i][j] = originalValue; // Undo the move
+            }
+        }
+    }
+
+    return bestScore;
+}
+
+pair<int, pair<int, int>> findBestMove() {
+    int bestVal = -1000;
+    pair<int, pair<int, int>> bestMove;
+    bestMove.first = -1;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (game_spaces[i][j] != 'X' && game_spaces[i][j] != 'O') {
+                char originalValue = game_spaces[i][j];
+                game_spaces[i][j] = 'O';
+
+                int moveVal = minimax(false);
+
+                game_spaces[i][j] = originalValue; // Undo the move
+
+                if (moveVal > bestVal) {
+                    bestMove.first = i;
+                    bestMove.second = make_pair(i, j);
+                    bestVal = moveVal;
+                }
+            }
+        }
+    }
+
+    return bestMove;
 }
 
 void gamefunction1() {
@@ -105,7 +197,16 @@ int main() {
     gameFunction0();
 
     while (!gamefunction2()) {
-        gamefunction1();
+        if (symbol == 'X') {
+            gamefunction1();
+        } else {
+            pair<int, pair<int, int>> bestMove = findBestMove();
+            row = bestMove.second.first;
+            column = bestMove.second.second;
+            game_spaces[row][column] = 'O'; // AI's turn
+            symbol = 'X'; // Switch back to player's turn
+        }
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 cout << " " << game_spaces[i][j] << " ";
@@ -125,6 +226,5 @@ int main() {
     }
 
     return 0;
-}
-*/
+}*/
 
